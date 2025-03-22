@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
 import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor
@@ -20,7 +21,7 @@ import java.util.UUID
 class ConversIA {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private val id: UUID? = null
 
@@ -36,4 +37,9 @@ class ConversIA {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     private val user: User? = null
+
+    @OneToMany
+    @JoinColumn(name = "conversia_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private val messagesIA: List<MessagesIA>? = null
+
 }

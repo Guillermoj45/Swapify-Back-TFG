@@ -1,5 +1,6 @@
 package com.example.swapify_back.Entities
 
+import com.example.swapify_back.Entities.enums.PremiunRol
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -16,12 +17,12 @@ import java.util.UUID
 class Premium {
 
     @Id
-    @Column(name = "user_id", nullable = false)
-    private val userId: UUID? = null
+    @Column(name = "profile_id", nullable = false)
+    private val profileId: UUID? = null
 
-    @Column(name = "created_at", nullable = false)
-    private val createdAt: LocalDateTime? = null
+    @Column(name = "by_at", nullable = false)
+    private val byAt: LocalDateTime? = null
 
     @Column(name = "rol", nullable = false)
-    private val rol: Int = 0
+    private val rol: PremiunRol = PremiunRol.FREE
 }

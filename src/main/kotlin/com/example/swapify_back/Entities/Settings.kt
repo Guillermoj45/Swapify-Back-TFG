@@ -1,5 +1,6 @@
 package com.example.swapify_back.Entities
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -24,6 +25,7 @@ class Settings {
     private val setting: String = "{}"
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonIgnore
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private val user: User? = null
 }

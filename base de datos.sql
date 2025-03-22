@@ -1,5 +1,3 @@
-create database swapify;
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 create table users (
                        id uuid primary key default uuid_generate_v4(),
@@ -10,12 +8,11 @@ create table users (
 
 create table profile (
                          id uuid not null primary key,
-                         nikname varchar(100) not null,
+                         nickname varchar(100) not null,
                          avatar varchar(255) not null,
                          born_date timestamp,
                          ban_at timestamp,
                          is_new_user boolean default true not null,
-                         created_at timestamp default current_timestamp,
 
                          constraint fk_users
                              foreign key (id)
@@ -25,13 +22,13 @@ create table profile (
 );
 
 create table premiun (
-                         user_id uuid not null,
-                         created_at timestamp default current_timestamp,
+                         profile_id uuid not null,
+                         by_at timestamp default current_timestamp,
                          rol smallint not null default 0,
 
                          constraint fk_users_premium
-                             foreign key (user_id)
-                                 references users(id)
+                             foreign key (profile_id)
+                                 references profile(id)
                                  on delete cascade
                                  on update cascade
 );
@@ -77,7 +74,7 @@ create table messages_IA (
 
 create table product (
                          id uuid primary key default uuid_generate_v4(),
-                         user_id uuid not null,
+                         profile_id uuid not null,
                          name varchar(255) not null,
                          description text not null,
                          points int not null,
@@ -86,8 +83,8 @@ create table product (
                          is_active boolean,
 
                          constraint fk_users_product
-                             foreign key (user_id)
-                                 references users(id)
+                             foreign key (profile_id)
+                                 references profile(id)
                                  on delete cascade
                                  on update cascade
 );
@@ -176,6 +173,7 @@ create table chat (
                       id_product uuid not null,
                       created_at timestamp default current_timestamp,
 
+                      primary key (id_user1, id_user2, id_product),
                       constraint fk_users_chat1
                           foreign key (id_user1)
                               references users(id)

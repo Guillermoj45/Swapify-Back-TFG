@@ -1,11 +1,13 @@
 package com.example.swapify_back.Entities
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
+import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 import lombok.AllArgsConstructor
 import lombok.Data
@@ -21,7 +23,7 @@ import java.util.UUID
 class Profile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private val id: UUID? = null
 
@@ -40,11 +42,20 @@ class Profile {
     @Column(name = "is_new_user", nullable = false)
     private val isNewUser: Boolean = true
 
-    @Column(name = "create_at", nullable = false)
-    private val createAt: LocalDateTime = LocalDateTime.now()
+    @OneToOne
+    @JoinColumn(name = "id")
+    @JsonIgnore
+    val user: User? = null
 
     @OneToOne
     @JoinColumn(name = "id")
-    val user: User? = null
+    val settings: Settings? = null
 
+    @OneToOne
+    @JoinColumn(name = "id")
+    val premium: Premium? = null
+
+    @OneToMany
+    @JoinColumn(name = "profile_id", referencedColumnName = "id", insertable = false, updatable = false)
+    val products: List<Product>? = null
 }
