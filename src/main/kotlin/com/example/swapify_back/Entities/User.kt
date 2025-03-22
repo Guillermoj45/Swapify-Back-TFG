@@ -29,5 +29,4 @@ class User {
 
     @Column(name = "created_at", nullable = false)
     private val createAt: LocalDateTime? = null
-
 }
