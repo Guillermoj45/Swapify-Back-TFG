@@ -1,6 +1,8 @@
 package com.example.swapify_back.Entities
 
+import com.example.swapify_back.Entities.Emdeabble.ChatId
 import jakarta.persistence.Column
+import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
@@ -17,17 +19,8 @@ import java.util.UUID
 @NoArgsConstructor
 class Chat {
 
-    @Id
-    @Column(name = "id_user1", nullable = false)
-    private val idUser1: UUID? = null
-
-    @Id
-    @Column(name = "id_user2", nullable = false)
-    private val idUser2: UUID? = null
-
-    @Id
-    @Column(name = "id_product", nullable = false)
-    private val idProduct: UUID? = null
+    @EmbeddedId
+    private val chatId: ChatId? = null
 
     @Column(name = "created_at", nullable = false)
     private val createdAt: LocalDateTime = LocalDateTime.now()
