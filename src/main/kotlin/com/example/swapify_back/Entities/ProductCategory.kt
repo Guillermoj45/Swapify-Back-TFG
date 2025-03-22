@@ -18,12 +18,12 @@ class ProductCategory {
 
     @Id
     @Column(name = "product_id", nullable = false)
-    private val productId: UUID? = null
+    var productId: UUID? = null
 
     @Column(name = "category", nullable = false)
-    private val category: String = ""
+    var category: String = ""
 
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private val product: Product? = null
+    var product: Product? = null
 }

@@ -22,31 +22,31 @@ class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private val id: UUID? = null
+    var id: UUID? = null
 
     @Column(name = "user_emisor_id", nullable = false)
-    private val userEmisorId: UUID? = null
+    var userEmisorId: UUID? = null
 
     @Column(name = "user_receptor_id", nullable = false)
-    private val userReceptorId: UUID? = null
+    var userReceptorId: UUID? = null
 
     @Column(name = "type", nullable = false)
-    private val type: Short = 0
+    var type: Short = 0
 
     @Column(name = "content", nullable = false, columnDefinition = "jsonb")
-    private val content: String = ""
+    var content: String = ""
 
     @Column(name = "created_at", nullable = false)
-    private val createdAt: LocalDateTime = LocalDateTime.now()
+    var createdAt: LocalDateTime = LocalDateTime.now()
 
     @Column(name = "is_read", nullable = false)
-    private val isRead: Boolean = false
+    var isRead: Boolean = false
 
     @ManyToOne
     @JoinColumn(name = "user_emisor_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private val userEmisor: User? = null
+    var userEmisor: User? = null
 
     @ManyToOne
     @JoinColumn(name = "user_receptor_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private val userReceptor: User? = null
+    var userReceptor: User? = null
 }

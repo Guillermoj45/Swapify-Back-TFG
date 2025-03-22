@@ -18,17 +18,17 @@ class SaveProduct {
 
     @Id
     @Column(name = "user_id", nullable = false)
-    private val userId: UUID? = null
+    var userId: UUID? = null
 
     @Id
     @Column(name = "product_id", nullable = false)
-    private val productId: UUID? = null
+    var productId: UUID? = null
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private val user: User? = null
+    var user: User? = null
 
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private val product: Product? = null
+    var product: Product? = null
 }

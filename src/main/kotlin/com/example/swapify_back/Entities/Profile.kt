@@ -25,37 +25,37 @@ class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    private val id: UUID? = null
+    var id: UUID? = null
 
     @Column(name = "nickname", nullable = false, unique = true)
-    private val nickname: String = ""
+    var nickname: String = ""
 
     @Column(name = "avatar", nullable = false)
-    private val avatar: String = ""
+    var avatar: String = ""
 
     @Column(name = "born_date")
-    private val bornDate: LocalDate? = null
+    var bornDate: LocalDate? = null
 
     @Column(name = "ban_at")
-    private val banAt: LocalDate? = null
+    var banAt: LocalDate? = null
 
     @Column(name = "is_new_user", nullable = false)
-    private val isNewUser: Boolean = true
+    var isNewUser: Boolean = true
 
     @OneToOne
     @JoinColumn(name = "id")
     @JsonIgnore
-    val user: User? = null
+    var user: User? = null
 
     @OneToOne
     @JoinColumn(name = "id")
-    val settings: Settings? = null
+    var settings: Settings? = null
 
     @OneToOne
     @JoinColumn(name = "id")
-    val premium: Premium? = null
+    var premium: Premium? = null
 
     @OneToMany
     @JoinColumn(name = "profile_id", referencedColumnName = "id", insertable = false, updatable = false)
-    val products: List<Product>? = null
+    var products: List<Product>? = null
 }

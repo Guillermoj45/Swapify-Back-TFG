@@ -23,23 +23,23 @@ class ConversIA {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    private val id: UUID? = null
+    var id: UUID? = null
 
     @Column(name = "user_id", nullable = false)
-    private val userId: UUID? = null
+    var userId: UUID? = null
 
     @Column(name = "nombre", nullable = false)
-    private val nombre: String = ""
+    var nombre: String = ""
 
     @Column(name = "created_at", nullable = false)
-    private val createdAt: LocalDateTime = LocalDateTime.now()
+    var createdAt: LocalDateTime = LocalDateTime.now()
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private val user: User? = null
+    var user: User? = null
 
     @OneToMany
     @JoinColumn(name = "conversia_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private val messagesIA: List<MessagesIA>? = null
+    var messagesIA: List<MessagesIA>? = null
 
 }

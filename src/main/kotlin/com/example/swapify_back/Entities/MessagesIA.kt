@@ -22,24 +22,24 @@ class MessagesIA {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private val id: UUID? = null
+    var id: UUID? = null
 
     @Column(name = "conversia_id", nullable = false)
-    private val conversiaId: UUID? = null
+    var conversiaId: UUID? = null
 
     @Column(name = "message", nullable = false)
-    private val message: String = ""
+    var message: String = ""
 
     @Column(name = "created_at", nullable = false)
-    private val createdAt: LocalDateTime = LocalDateTime.now()
+    var createdAt: LocalDateTime = LocalDateTime.now()
 
     @Column(name = "is_user", nullable = false)
-    private val isUser: Boolean = false
+    var isUser: Boolean = false
 
     @Column(name = "image")
-    private val image: String? = null
+    var image: String? = null
 
     @ManyToOne
     @JoinColumn(name = "conversia_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private val conversIA: ConversIA? = null
+    var conversIA: ConversIA? = null
 }

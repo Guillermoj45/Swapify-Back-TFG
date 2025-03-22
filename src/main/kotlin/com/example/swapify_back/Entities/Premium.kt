@@ -18,11 +18,11 @@ class Premium {
 
     @Id
     @Column(name = "profile_id", nullable = false)
-    private val profileId: UUID? = null
+    var profileId: UUID? = null
 
     @Column(name = "by_at", nullable = false)
-    private val byAt: LocalDateTime? = null
+    var byAt: LocalDateTime? = null
 
     @Column(name = "rol", nullable = false)
-    private val rol: PremiunRol = PremiunRol.FREE
+    var rol: PremiunRol = PremiunRol.FREE
 }

@@ -18,22 +18,21 @@ import java.util.UUID
 @AllArgsConstructor
 @NoArgsConstructor
 class Chat {
-
     @EmbeddedId
-    private val chatId: ChatId? = null
+    var chatId: ChatId? = null
 
     @Column(name = "created_at", nullable = false)
-    private val createdAt: LocalDateTime = LocalDateTime.now()
+    var createdAt: LocalDateTime = LocalDateTime.now()
 
     @ManyToOne
     @JoinColumn(name = "id_user1", referencedColumnName = "id", insertable = false, updatable = false)
-    private val user1: User? = null
+    var user1: User? = null
 
     @ManyToOne
     @JoinColumn(name = "id_user2", referencedColumnName = "id", insertable = false, updatable = false)
-    private val user2: User? = null
+    var user2: User? = null
 
     @ManyToOne
     @JoinColumn(name = "id_product", referencedColumnName = "id", insertable = false, updatable = false)
-    private val product: Product? = null
+    var product: Product? = null
 }

@@ -19,13 +19,13 @@ class Settings {
 
     @Id
     @Column(name = "user_id", nullable = false)
-    private val userId: UUID? = null
+    var userId: UUID? = null
 
     @Column(name = "setting", nullable = false, columnDefinition = "json")
-    private val setting: String = "{}"
+    var setting: String = "{}"
 
     @OneToOne
     @JsonIgnore
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private val user: User? = null
+    var user: User? = null
 }

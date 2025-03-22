@@ -22,28 +22,28 @@ class ReportProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    private val id: UUID? = null
+    var id: UUID? = null
 
     @Column(name = "product_id", nullable = false)
-    private val productId: UUID? = null
+    var productId: UUID? = null
 
     @Column(name = "user_id", nullable = false)
-    private val userId: UUID? = null
+    var userId: UUID? = null
 
     @Column(name = "type", nullable = false)
-    private val type: Short = 0
+    var type: Short = 0
 
     @Column(name = "description", nullable = false)
-    private val description: String = ""
+    var description: String = ""
 
     @Column(name = "created_at", nullable = false)
-    private val createdAt: LocalDateTime = LocalDateTime.now()
+    var createdAt: LocalDateTime = LocalDateTime.now()
 
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private val product: Product? = null
+    var product: Product? = null
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private val user: User? = null
+    var user: User? = null
 }

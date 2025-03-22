@@ -15,16 +15,16 @@ class SellProduct {
 
     @Id
     @Column(name = "product_id", nullable = false)
-    private val productId: UUID? = null
+    var productId: UUID? = null
 
     @Column(name = "created_at", nullable = false)
-    private val createdAt: LocalDateTime = LocalDateTime.now()
+    var createdAt: LocalDateTime = LocalDateTime.now()
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private val user: User? = null
+    var user: User? = null
 
     @OneToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private val product: Product? = null
+    var product: Product? = null
 }
