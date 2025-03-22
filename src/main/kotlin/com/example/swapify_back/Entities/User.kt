@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor
 import org.hibernate.annotations.Cascade
+import java.time.LocalDateTime
+import java.util.UUID
 
 @Data
 @Entity(name = "Users")
@@ -17,23 +19,15 @@ class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private val id:Long? = null
+    private val id:UUID? = null
 
-    @Column(name = "username", nullable = false, unique = true)
-    private val userName:String = ""
+    @Column(name = "email", nullable = false, unique = true)
+    private val email:String = ""
 
     @Column(name = "password", nullable = false)
     private val password:String = ""
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "role", nullable = false, columnDefinition = "0")
-    private val rol: Rol = Rol.USER
-
-    @JsonIgnore
-
-
-    @OneToOne(cascade = [CascadeType.REMOVE])
-    @JoinColumn(name = "data_user_id", referencedColumnName = "id")
-    var userData: DataUser? = null
+    @Column(name = "created_at", nullable = false)
+    private val createAt: LocalDateTime? = null
 
 }
