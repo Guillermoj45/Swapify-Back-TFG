@@ -6,7 +6,7 @@ import java.util.*
 
 @Embeddable
 data class ChatId(
-    val idUser1: UUID? = null,
-    val idUser2: UUID? = null,
-    val idProduct: UUID? = null
+    val id_user1: UUID? = null,
+    val id_user2: UUID? = null,
+    val id_product: UUID? = null
 ) : Serializable

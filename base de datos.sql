@@ -169,12 +169,12 @@ create table report_product (
 );
 
 create table chat (
+                        id uuid primary key default uuid_generate_v4(),
                       id_user1 uuid not null,
                       id_user2 uuid not null,
                       id_product uuid not null,
                       created_at timestamp default current_timestamp,
 
-                      primary key (id_user1, id_user2, id_product),
                       constraint fk_users_chat1
                           foreign key (id_user1)
                               references users(id)
@@ -193,6 +193,9 @@ create table chat (
                               on delete cascade
                               on update cascade
 );
+
+create unique index chat_id_user1_id_user2_id_product_uindex
+    on chat (id_user1, id_user2, id_product);
 
 create table notification (
                               id uuid primary key default uuid_generate_v4(),

@@ -13,15 +13,12 @@ import java.util.*
 @Entity(name = "product")
 @AllArgsConstructor
 @NoArgsConstructor
-class Product {
+open class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     var id: UUID? = null
-
-    @Column(name = "profile_id", nullable = false)
-    var userId: UUID? = null
 
     @Column(name = "name", nullable = false)
     var name: String = ""
@@ -48,8 +45,8 @@ class Product {
     var imagenes: List<String>? = null
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-    var user: User? = null
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    var profile: Profile? = null
 
     @OneToOne
     @JoinColumn(name = "id")

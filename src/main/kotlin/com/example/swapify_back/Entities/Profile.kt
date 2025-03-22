@@ -13,8 +13,8 @@ import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.UUID
+import kotlin.collections.ArrayList
 
 @Data
 @Entity(name = "Profile")
@@ -57,5 +57,5 @@ class Profile {
 
     @OneToMany
     @JoinColumn(name = "profile_id", referencedColumnName = "id", insertable = false, updatable = false)
-    var products: List<Product>? = null
+    var products: ArrayList<Product> = ArrayList()
 }

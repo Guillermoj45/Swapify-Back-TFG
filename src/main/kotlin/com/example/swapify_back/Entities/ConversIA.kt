@@ -40,6 +40,6 @@ class ConversIA {
 
     @OneToMany
     @JoinColumn(name = "conversia_id", referencedColumnName = "id", insertable = false, updatable = false)
-    var messagesIA: List<MessagesIA>? = null
+    var messagesIA: ArrayList<MessagesIA>? = null
 
 }

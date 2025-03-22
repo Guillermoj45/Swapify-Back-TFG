@@ -30,4 +30,12 @@ class User {
     
     @Column(name = "rol", nullable = false)
     var rol: Rol = Rol.USER
+
+    @ManyToMany
+    @JoinTable(
+        name = "save_product",
+        joinColumns = [JoinColumn(name = "user_id")],
+        inverseJoinColumns = [JoinColumn(name = "product_id")]
+    )
+    var productSave: ArrayList<Product> = ArrayList()
 }
