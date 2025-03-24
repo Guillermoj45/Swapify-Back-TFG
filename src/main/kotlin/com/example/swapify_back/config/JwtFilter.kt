@@ -1,9 +1,9 @@
 package com.example.swapify_back.config
 
-import com.example.swapify_back.Config.JwtService
+
 import com.example.swapify_back.DTO.TokenDTO
-import com.example.swapify_back.Entities.User
-import com.example.swapify_back.Services.UserService
+import com.example.swapify_back.entities.User
+import com.example.swapify_back.service.UserService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest

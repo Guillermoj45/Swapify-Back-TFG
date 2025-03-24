@@ -1,7 +1,10 @@
 package com.example.swapify_back.controller
 
+import com.example.swapify_back.DTO.NewCustomerDTO
 import com.example.swapify_back.entities.User
-import com.example.swapify_back.Services.UserService
+import com.example.swapify_back.service.UserService
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -11,8 +14,9 @@ class UserController(
     private var userService: UserService
 ) {
     @PostMapping
-    fun saveUser(@RequestBody user: User):User {
-        return userService.saveUser(user)
+    fun saveUser(@RequestBody user: NewCustomerDTO): ResponseEntity<Void> {
+        userService.saveUser(user)
+        return ResponseEntity(HttpStatus.CREATED)
     }
 
     @GetMapping

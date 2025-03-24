@@ -2,60 +2,47 @@ package com.example.swapify_back.entities
 
 import com.example.swapify_back.entities.enums.Rol
 import jakarta.persistence.*
-import lombok.AllArgsConstructor
-import lombok.Data
-import lombok.NoArgsConstructor
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 import java.io.Serializable
 import java.time.LocalDateTime
 import java.util.*
 
-@Data
-@Entity(name = "Users")
-@AllArgsConstructor
-@NoArgsConstructor
-class User: Serializable {
-
+@Entity
+@Table(name = "users") // Convención de nombres en SQL
+class User: UserDetails, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    var id:UUID = UUID.randomUUID()
+    val id: UUID? = null
 
     @Column(name = "email", nullable = false, unique = true)
-    var email:String = ""
+    var email: String = ""
 
     @Column(name = "password", nullable = false)
-    var password:String = ""
+    var passworde: String = ""
 
     @Column(name = "created_at", nullable = false)
-    var createAt: LocalDateTime = LocalDateTime.now()
-    
+    var createdAt: LocalDateTime = LocalDateTime.now()
+
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "rol", nullable = false)
     var rol: Rol = Rol.USER
 
-    fun getAuthorities(): Collection<GrantedAuthority?> {
-        return listOf<SimpleGrantedAuthority>(SimpleGrantedAuthority(this.rol.name))
+    override fun getAuthorities(): Collection<GrantedAuthority> {
+        return listOf(SimpleGrantedAuthority(rol.name))
     }
 
-    fun getUsername(): String {
-        return this.email
-    }
+    override fun getPassword(): String = passworde
 
-    fun isAccountNonExpired(): Boolean {
-        return true
-    }
+    override fun getUsername(): String = email
 
-    fun isAccountNonLocked(): Boolean {
-        return true
-    }
+    override fun isAccountNonExpired(): Boolean = true
 
-    fun isCredentialsNonExpired(): Boolean {
-        return true
-    }
+    override fun isAccountNonLocked(): Boolean = true
 
-    fun isEnabled(): Boolean {
-        return true
-    }
+    override fun isCredentialsNonExpired(): Boolean = true
 
+    override fun isEnabled(): Boolean = true
 }

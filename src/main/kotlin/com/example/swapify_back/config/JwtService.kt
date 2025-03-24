@@ -1,7 +1,7 @@
 package com.example.swapify_back.config
 
 import com.example.swapify_back.DTO.TokenDTO
-import com.example.swapify_back.Entities.User
+import com.example.swapify_back.entities.User
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm

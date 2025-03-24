@@ -1,7 +1,6 @@
 package com.example.swapify_back.config
 
 
-import JwtFilter
 import lombok.AllArgsConstructor
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
