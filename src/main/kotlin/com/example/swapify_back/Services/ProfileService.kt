@@ -1,4 +1,4 @@
-package com.example.swapify_back.service
+package com.example.swapify_back.Services
 
 import com.example.swapify_back.repository.IProfileRepository
 

@@ -5,9 +5,11 @@ import jakarta.persistence.*
 import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import java.io.Serializable
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 @Data
 @Entity(name = "Users")
@@ -31,5 +33,29 @@ class User: Serializable {
     
     @Column(name = "rol", nullable = false)
     var rol: Rol = Rol.USER
+
+    fun getAuthorities(): Collection<GrantedAuthority?> {
+        return listOf<SimpleGrantedAuthority>(SimpleGrantedAuthority(this.rol.name))
+    }
+
+    fun getUsername(): String {
+        return this.email
+    }
+
+    fun isAccountNonExpired(): Boolean {
+        return true
+    }
+
+    fun isAccountNonLocked(): Boolean {
+        return true
+    }
+
+    fun isCredentialsNonExpired(): Boolean {
+        return true
+    }
+
+    fun isEnabled(): Boolean {
+        return true
+    }
 
 }

@@ -50,7 +50,7 @@ class Profile {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
-    var products: ArrayList<Product> = ArrayList()
+    var products: MutableList<Product> = ArrayList()
 
     @ManyToMany
     @JoinTable(

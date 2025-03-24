@@ -43,7 +43,7 @@ class Product {
     @CollectionTable(name = "product_image", joinColumns = [JoinColumn(name = "product_id")])
     @Cascade(CascadeType.REMOVE)
     @Column(name = "image")
-    var imagenes: List<String> = ArrayList()
+    var imagenes: MutableList<String> = ArrayList()
 
     @ManyToOne
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
