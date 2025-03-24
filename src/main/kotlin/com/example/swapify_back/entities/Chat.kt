@@ -14,7 +14,7 @@ import java.util.UUID
 class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: UUID? = null
+    var id: UUID = UUID.randomUUID()
 
     @Column(name = "created_at", nullable = false)
     var createdAt: LocalDateTime = LocalDateTime.now()

@@ -23,7 +23,7 @@ class ConversIA {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    var id: UUID? = null
+    var id: UUID = UUID.randomUUID()
 
     @Column(name = "user_id", nullable = false)
     var userId: UUID? = null

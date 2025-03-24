@@ -22,7 +22,7 @@ class MessagesIA {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    var id: UUID? = null
+    var id: UUID = UUID.randomUUID()
 
     @Column(name = "conversia_id", nullable = false)
     var conversiaId: UUID? = null

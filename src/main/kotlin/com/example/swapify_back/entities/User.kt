@@ -18,7 +18,7 @@ class User: Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    var id:UUID? = null
+    var id:UUID = UUID.randomUUID()
 
     @Column(name = "email", nullable = false, unique = true)
     var email:String = ""
