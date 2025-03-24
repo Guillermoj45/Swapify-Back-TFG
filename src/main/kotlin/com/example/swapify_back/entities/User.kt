@@ -12,10 +12,10 @@ import java.util.*
 @Entity
 @Table(name = "users") // Convención de nombres en SQL
 class User: UserDetails, Serializable {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    val id: UUID? = null
+    val id: UUID = UUID.randomUUID()
 
     @Column(name = "email", nullable = false, unique = true)
     var email: String = ""
