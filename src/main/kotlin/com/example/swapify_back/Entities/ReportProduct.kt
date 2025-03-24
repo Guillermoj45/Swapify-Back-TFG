@@ -22,7 +22,7 @@ class ReportProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    var id: UUID? = null
+    var id: UUID = UUID.randomUUID()
 
     @Column(name = "product_id", nullable = false)
     var productId: UUID? = null

@@ -26,7 +26,7 @@ class User {
     var password:String = ""
 
     @Column(name = "created_at", nullable = false)
-    var createAt: LocalDateTime? = null
+    var createAt: LocalDateTime = LocalDateTime.now()
     
     @Column(name = "rol", nullable = false)
     var rol: Rol = Rol.USER
@@ -37,5 +37,5 @@ class User {
         joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "product_id")]
     )
-    var productSave: ArrayList<Product> = ArrayList()
+    var productSave: MutableList<Product> = ArrayList()
 }

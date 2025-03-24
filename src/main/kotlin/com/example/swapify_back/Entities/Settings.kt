@@ -18,14 +18,14 @@ import java.util.UUID
 class Settings {
 
     @Id
-    @Column(name = "user_id", nullable = false)
-    var userId: UUID? = null
+    @Column(name = "profile_id", nullable = false)
+    var profileId: UUID? = null
 
     @Column(name = "setting", nullable = false, columnDefinition = "json")
     var setting: String = "{}"
 
     @OneToOne
     @JsonIgnore
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    var user: User? = null
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    var profile: Profile? = null
 }

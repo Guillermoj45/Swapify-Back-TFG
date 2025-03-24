@@ -28,7 +28,7 @@ class Chat {
     @JoinColumn(name = "id_user2", referencedColumnName = "id")
     var user2: User? = null
 
-    @ManyToOne
-    @JoinColumn(name = "id_product", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_product", referencedColumnName = "id")
     var product: Product? = null
 }

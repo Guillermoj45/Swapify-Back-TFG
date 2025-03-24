@@ -8,17 +8,18 @@ import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.CascadeType
 import java.time.LocalDateTime
 import java.util.*
+import kotlin.collections.ArrayList
 
 @Data
 @Entity(name = "product")
 @AllArgsConstructor
 @NoArgsConstructor
-open class Product {
+class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
-    var id: UUID? = null
+    var id: UUID = UUID.randomUUID()
 
     @Column(name = "name", nullable = false)
     var name: String = ""
@@ -36,13 +37,13 @@ open class Product {
     var updatedAt: LocalDateTime = LocalDateTime.now()
 
     @Column(name = "is_active")
-    var isActive: Boolean? = null
+    var isActive: Boolean = true
 
     @ElementCollection
     @CollectionTable(name = "product_image", joinColumns = [JoinColumn(name = "product_id")])
     @Cascade(CascadeType.REMOVE)
     @Column(name = "image")
-    var imagenes: List<String>? = null
+    var imagenes: List<String> = ArrayList()
 
     @ManyToOne
     @JoinColumn(name = "profile_id", referencedColumnName = "id")

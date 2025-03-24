@@ -22,7 +22,7 @@ class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    var id: UUID? = null
+    var id: UUID = UUID.randomUUID()
 
     @Column(name = "user_emisor_id", nullable = false)
     var userEmisorId: UUID? = null

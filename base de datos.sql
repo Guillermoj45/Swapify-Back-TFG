@@ -35,12 +35,12 @@ create table premiun (
 );
 
 create table settings (
-                          user_id uuid not null,
+                          profile_id uuid not null,
                           setting json not null default '{}',
 
                           constraint fk_users_settings
-                              foreign key (user_id)
-                                  references users(id)
+                              foreign key (profile_id)
+                                  references profile(id)
                                   on delete cascade
                                   on update cascade
 );
