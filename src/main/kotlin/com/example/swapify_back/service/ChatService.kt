@@ -1,6 +1,6 @@
 package com.example.swapify_back.service
 
-import com.example.swapify_back.Repository.IChatRepository
+import com.example.swapify_back.repository.IChatRepository
 import org.springframework.stereotype.Service
 
 @Service
