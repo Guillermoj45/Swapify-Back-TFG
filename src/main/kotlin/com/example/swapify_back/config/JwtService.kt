@@ -45,8 +45,8 @@ class JwtService {
     }
 
     // Función que me extrae los datos del usuario eliminando toda la seguridad y header del token
-    fun extractTokenData(token: String): TokenDTO {
-        var token = token
+    fun extractTokenData(token1: String): TokenDTO {
+        var token = token1
         token = token.trim { it <= ' ' }
 
         val claims = extractDatosToken(token)
@@ -70,8 +70,8 @@ class JwtService {
         return Keys.hmacShaKeyFor(keyBytes)
     }
 
-    fun desEncriptToken(token: String): String {
-        var token = token
+    fun desEncriptToken(token1: String): String {
+        var token = token1
         if (token.startsWith("Bearer ")) {
             token = token.substring(7).trim { it <= ' ' }
         }

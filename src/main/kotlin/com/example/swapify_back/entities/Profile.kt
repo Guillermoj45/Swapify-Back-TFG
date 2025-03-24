@@ -16,7 +16,6 @@ import kotlin.collections.ArrayList
 class Profile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     var id: UUID? = null
 
