@@ -3,6 +3,7 @@ package com.example.swapify_back.controller
 import com.example.swapify_back.Entities.User
 import com.example.swapify_back.service.UserService
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 @RequestMapping("/user")
@@ -14,4 +15,8 @@ class UserController(
         return userService.saveUser(user)
     }
 
+    @GetMapping
+    fun finUser(@RequestParam(value = "id", defaultValue = "0") id: UUID): User {
+        return userService.findById(id)
+    }
 }

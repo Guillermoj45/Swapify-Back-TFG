@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inicio - Login con Discord</title>
+    <style>
+        /* Estilos básicos para la página */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .login-button {
+            background-color: #7289da;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+        .login-button:hover {
+            background-color: #5b6eae;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Bienvenido a mi aplicación</h1>
+    <p>Haz clic en el botón para iniciar sesión con Discord.</p>
+    <!-- El href debe apuntar al endpoint que Spring Security utiliza para iniciar el flujo OAuth2 -->
+    <a class="login-button" href="/oauth2/authorization/discord">
+        Iniciar sesión con Discord
+    </a>
+</div>
+</body>
+</html>

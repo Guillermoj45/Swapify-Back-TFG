@@ -5,6 +5,7 @@ import jakarta.persistence.*
 import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor
+import java.io.Serializable
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -12,7 +13,7 @@ import java.util.UUID
 @Entity(name = "Users")
 @AllArgsConstructor
 @NoArgsConstructor
-class User {
+class User: Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
