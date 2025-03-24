@@ -21,7 +21,7 @@ class SellProduct {
     var createdAt: LocalDateTime = LocalDateTime.now()
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
     var user: User? = null
 
     @OneToOne

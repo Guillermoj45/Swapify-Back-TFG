@@ -16,7 +16,6 @@ class ProductCategory {
     @Column(name = "product_id", nullable = false)
     var productId: UUID? = null
 
-
     @Column(name = "category", nullable = false)
     var category: String = ""
 

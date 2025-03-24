@@ -91,12 +91,12 @@ create table product (
 );
 
 create table save_product (
-                              user_id uuid not null,
+                              profile_id uuid not null,
                               product_id uuid not null,
 
                               constraint fk_users_saveProduct
-                                  foreign key (user_id)
-                                      references users(id)
+                                  foreign key (profile_id)
+                                      references profile(id)
                                       on delete cascade
                                       on update cascade,
 
@@ -120,12 +120,12 @@ create table product_image (
 
 create table sell_product (
                               product_id uuid not null primary key,
-                              user_id uuid not null,
+                              profile_id uuid not null,
                               created_at timestamp default current_timestamp,
 
                               constraint fk_users_sellProduct
-                                  foreign key (user_id)
-                                      references users(id)
+                                  foreign key (profile_id)
+                                      references profile(id)
                                       on delete cascade
                                       on update cascade,
 

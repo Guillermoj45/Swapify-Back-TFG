@@ -49,6 +49,14 @@ class Profile {
     var premium: Premium? = null
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
     var products: ArrayList<Product> = ArrayList()
+
+    @ManyToMany
+    @JoinTable(
+        name = "save_product",
+        joinColumns = [JoinColumn(name = "profile_id")],
+        inverseJoinColumns = [JoinColumn(name = "product_id")]
+    )
+    var productSave: MutableList<Product> = ArrayList()
 }
