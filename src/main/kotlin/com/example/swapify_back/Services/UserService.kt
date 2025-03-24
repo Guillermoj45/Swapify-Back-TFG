@@ -6,9 +6,11 @@ import com.example.swapify_back.entities.User
 import com.example.swapify_back.repository.IProfileRepository
 import com.example.swapify_back.repository.IUserRepository
 import jakarta.transaction.Transactional
+import okio.ByteString.Companion.encode
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import  org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -21,10 +23,10 @@ class UserService(
 
     @Transactional
     fun saveUser(userdto: NewCustomerDTO) {
+        val passwordEncoder = BCryptPasswordEncoder()
         var user1 = User()
         user1.email = userdto.email
-        user1.passworde = userdto.password
-
+        user1.passworde = passwordEncoder.encode(userdto.password)
         user1 = userRepository.save(user1)
 
         val profile1 = Profile()
