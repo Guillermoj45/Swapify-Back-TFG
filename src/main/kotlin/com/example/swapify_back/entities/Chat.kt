@@ -11,22 +11,23 @@ import java.util.UUID
 @Entity(name = "chat")
 @AllArgsConstructor
 @NoArgsConstructor
+@IdClass(ChatId::class)
 class Chat {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: UUID = UUID.randomUUID()
 
     @Column(name = "created_at", nullable = false)
     var createdAt: LocalDateTime = LocalDateTime.now()
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "id_user1", referencedColumnName = "id")
     var user1: User? = null
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "id_user2", referencedColumnName = "id")
     var user2: User? = null
 
+    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_product", referencedColumnName = "id")
     var product: Product? = null
