@@ -1,11 +1,13 @@
 package com.example.swapify_back.entities
 
+import com.example.swapify_back.cloudinary.CloudinaryService
 import jakarta.persistence.*
 import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor
 import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.CascadeType
+import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
@@ -41,7 +43,7 @@ class Product {
 
     @ElementCollection
     @CollectionTable(name = "product_image", joinColumns = [JoinColumn(name = "product_id")])
-    @Cascade(CascadeType.REMOVE)
+    @Cascade(CascadeType.ALL)
     @Column(name = "image")
     var imagenes: MutableList<String> = ArrayList()
 
@@ -50,6 +52,12 @@ class Product {
     var profile: Profile? = null
 
     @OneToOne
+    @Cascade(CascadeType.ALL)
     @JoinColumn(name = "id")
     var sellProduct: SellProduct? = null
+
+    @PreUpdate
+    fun preUpdate() {
+        updatedAt = LocalDateTime.now()
+    }
 }
