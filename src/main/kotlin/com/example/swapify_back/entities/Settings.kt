@@ -21,8 +21,11 @@ class Settings {
     @Column(name = "profile_id", nullable = false)
     var profileId: UUID? = null
 
-    @Column(name = "setting", nullable = false, columnDefinition = "json")
-    var setting: String = "{}"
+    @Column(name = "name", nullable = false)
+    var name: String = ""
+
+    @Column(name = "value", nullable = false)
+    var value: String = ""
 
     @OneToOne
     @JsonIgnore
