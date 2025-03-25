@@ -1,10 +1,9 @@
-package com.example.swapify_back.service
+package com.example.swapify_back.Services
 
-import com.example.swapify_back.Entities.Product
-import com.example.swapify_back.Entities.ProductCategory
-import com.example.swapify_back.Repository.IProductCategoryRepository
-import com.example.swapify_back.Repository.IProductRepository
-import com.example.swapify_back.Repository.IReportProductRepository
+import com.example.swapify_back.entities.Product
+import com.example.swapify_back.repository.IProductCategoryRepository
+import com.example.swapify_back.repository.IProductRepository
+import com.example.swapify_back.repository.IReportProductRepository
 import com.example.swapify_back.cloudinary.CloudinaryService
 
 class ProductService(
