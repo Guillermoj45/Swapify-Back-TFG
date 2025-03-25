@@ -14,7 +14,7 @@ class AuthController {
     }
 
     @GetMapping("/welcome")
-    fun welcome(@AuthenticationPrincipal oauth2User: OAuth2User): String {
-        return oauth2User.attributes.toString()
+    fun welcome(@AuthenticationPrincipal oauth2User: OAuth2User): Map<String, Any> {
+        return oauth2User.attributes
     }
 }

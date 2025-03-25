@@ -1,7 +1,6 @@
 package com.example.swapify_back.config
 
-
-import lombok.AllArgsConstructor
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationProvider
@@ -20,8 +19,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 class SecurityConfig(
     private val jwtFilterChain: JwtFilter,
-    private val authenticationProvider: AuthenticationProvider
+    private val authenticationProvider: AuthenticationProvider,
+
 ) {
+    @Value("\${SECURITY_REDIRECT_URL}")
+    private val redirectUrl: String? = null
 
     @Bean
     @Throws(Exception::class)
@@ -38,7 +40,9 @@ class SecurityConfig(
                     .anyRequest().authenticated()
             }
             )
-            .oauth2Login { oauth2 -> oauth2.defaultSuccessUrl("/welcome", true) }
+            .oauth2Login { oauth2 ->
+                oauth2.defaultSuccessUrl(redirectUrl, true)
+            }
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtFilterChain, UsernamePasswordAuthenticationFilter::class.java)
 
