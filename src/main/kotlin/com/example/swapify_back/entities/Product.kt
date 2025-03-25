@@ -16,7 +16,7 @@ import kotlin.collections.ArrayList
 @Entity(name = "product")
 @AllArgsConstructor
 @NoArgsConstructor
-open class Product {
+class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
