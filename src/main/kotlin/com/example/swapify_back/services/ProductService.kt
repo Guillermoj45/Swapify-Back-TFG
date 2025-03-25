@@ -1,4 +1,4 @@
-package com.example.swapify_back.Services
+package com.example.swapify_back.services
 
 import com.example.swapify_back.entities.Product
 import com.example.swapify_back.repository.IProductCategoryRepository

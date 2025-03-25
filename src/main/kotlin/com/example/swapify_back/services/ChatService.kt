@@ -1,8 +1,6 @@
-package com.example.swapify_back.Services
+package com.example.swapify_back.services
 
 import com.example.swapify_back.repository.IChatRepository
-import com.example.swapify_back.entities.Chat
-import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Service
 
 @Service
