@@ -1,16 +1,18 @@
 package com.example.swapify_back.service
 
+import com.example.swapify_back.DTO.LoginDTO
 import com.example.swapify_back.DTO.NewCustomerDTO
+import com.example.swapify_back.DTO.RespuestaTokenDTO
+import com.example.swapify_back.config.JwtService
 import com.example.swapify_back.entities.Profile
 import com.example.swapify_back.entities.User
 import com.example.swapify_back.repository.IProfileRepository
 import com.example.swapify_back.repository.IUserRepository
 import jakarta.transaction.Transactional
-import okio.ByteString.Companion.encode
+import org.springframework.http.HttpStatus
 import org.springframework.cache.annotation.Cacheable
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
-import  org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -18,7 +20,8 @@ import java.util.*
 @Service
 class UserService(
     private val userRepository: IUserRepository,
-    private val profileRepository: IProfileRepository
+    private val profileRepository: IProfileRepository,
+    private val jwtService: JwtService
 ) {
 
     @Transactional
@@ -53,5 +56,27 @@ class UserService(
             }
         }
        return throw UsernameNotFoundException("User not found")
+    }
+
+    fun loginUser(userLogin:LoginDTO ): RespuestaTokenDTO{
+        var user: Optional<User> = userRepository.findByEmail(userLogin.email)
+        if (!user.isPresent){
+            return throw UsernameNotFoundException("User not found")
+        }
+
+        isPasswordValid(userLogin.password, user.get().passworde)
+
+        val generatedToken: String = jwtService.generateToken(user.get())
+
+        return RespuestaTokenDTO(
+            estado = HttpStatus.OK.value(),
+            token = generatedToken
+        )
+    }
+
+    private fun isPasswordValid(password: String, passworde: String) {
+        if (!BCryptPasswordEncoder().matches(password, passworde)) {
+            throw IllegalArgumentException("Invalid password")
+        }
     }
 }
