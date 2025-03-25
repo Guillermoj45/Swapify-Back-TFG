@@ -3,6 +3,8 @@ package com.example.swapify_back.service
 import com.example.swapify_back.DTO.LoginDTO
 import com.example.swapify_back.DTO.NewCustomerDTO
 import com.example.swapify_back.DTO.RespuestaTokenDTO
+import com.example.swapify_back.cloudinary.CloudinaryService
+import com.example.swapify_back.cloudinary.UploadResult
 import com.example.swapify_back.config.JwtService
 import com.example.swapify_back.entities.Profile
 import com.example.swapify_back.entities.User
@@ -14,28 +16,33 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 import java.util.*
+import java.util.concurrent.CompletableFuture
 
 
 @Service
 class UserService(
     private val userRepository: IUserRepository,
     private val profileRepository: IProfileRepository,
-    private val jwtService: JwtService
+    private val jwtService: JwtService,
+    private val clodinary: CloudinaryService
 ) {
 
     @Transactional
     fun saveUser(userdto: NewCustomerDTO) {
+
         val passwordEncoder = BCryptPasswordEncoder()
         var user1 = User()
         user1.email = userdto.email
         user1.passworde = passwordEncoder.encode(userdto.password)
         user1 = userRepository.save(user1)
 
+        val futuroArchivo: CompletableFuture<UploadResult> = subidaImagenCloudinary(avatar = userdto.avatar)
         val profile1 = Profile()
         profile1.id = user1.id
         profile1.nickname = userdto.nickname
-        profile1.avatar = userdto.avatar
+        profile1.avatar = futuroArchivo.get().publicId
         profile1.bornDate = userdto.bornDate
 
         profileRepository.save(profile1)
@@ -78,5 +85,9 @@ class UserService(
         if (!BCryptPasswordEncoder().matches(password, passworde)) {
             throw IllegalArgumentException("Invalid password")
         }
+    }
+
+    private fun subidaImagenCloudinary(avatar: MultipartFile): CompletableFuture<UploadResult> {
+        return clodinary.uploadFileAsync(avatar, null)
     }
 }
