@@ -1,6 +1,6 @@
 package com.example.swapify_back.entities
 
-import com.example.swapify_back.entities.Emdeabble.ChatId
+import com.example.swapify_back.entities.emdeabble.ChatId
 import jakarta.persistence.*
 import lombok.AllArgsConstructor
 import lombok.Data

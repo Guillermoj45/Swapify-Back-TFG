@@ -39,9 +39,9 @@ class Profile {
     @JsonIgnore
     var user: User? = null
 
-    @OneToOne
-    @JoinColumn(name = "id")
-    var settings: Settings? = null
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    var settings: MutableList<Settings> = ArrayList()
 
     @OneToOne
     @JoinColumn(name = "id")

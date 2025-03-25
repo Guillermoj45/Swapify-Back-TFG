@@ -1,6 +1,5 @@
-package com.example.swapify_back.entities.Emdeabble
+package com.example.swapify_back.entities.emdeabble
 
-import jakarta.persistence.Embeddable
 import java.io.Serializable
 import java.util.*
 
