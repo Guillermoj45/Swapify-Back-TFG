@@ -6,13 +6,15 @@ import com.example.swapify_back.DTO.RespuestaTokenDTO
 import com.example.swapify_back.cloudinary.CloudinaryService
 import com.example.swapify_back.cloudinary.UploadResult
 import com.example.swapify_back.config.JwtService
+import com.example.swapify_back.email.EmailController
 import com.example.swapify_back.entities.Profile
 import com.example.swapify_back.entities.User
 import com.example.swapify_back.repository.IProfileRepository
 import com.example.swapify_back.repository.IUserRepository
 import jakarta.transaction.Transactional
-import org.springframework.http.HttpStatus
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.context.annotation.Lazy
+import org.springframework.http.HttpStatus
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
@@ -26,7 +28,8 @@ class UserService(
     private val userRepository: IUserRepository,
     private val profileRepository: IProfileRepository,
     private val jwtService: JwtService,
-    private val clodinary: CloudinaryService
+    private val clodinary: CloudinaryService,
+    @Lazy private val email: EmailController
 ) {
 
     @Transactional
@@ -38,14 +41,21 @@ class UserService(
         user1.passworde = passwordEncoder.encode(userdto.password)
         user1 = userRepository.save(user1)
 
-        val futuroArchivo: CompletableFuture<UploadResult> = subidaImagenCloudinary(avatar = userdto.avatar)
         val profile1 = Profile()
         profile1.id = user1.id
         profile1.nickname = userdto.nickname
-        profile1.avatar = futuroArchivo.get().publicId
         profile1.bornDate = userdto.bornDate
 
+        if (userdto.avatar != null) {
+            val futuroArchivo: CompletableFuture<UploadResult> = subidaImagenCloudinary(avatar = userdto.avatar)
+            profile1.avatar = futuroArchivo.get().publicId
+        } else {
+            profile1.avatar = "Swapify/avatares/vl4elwp26kqokvn2mk5g"
+        }
+
         profileRepository.save(profile1)
+
+        email.sendWelcomeEmail(user1.email)
     }
 
     // @CacheEvict(value = "productos", key = "#id")
@@ -89,5 +99,9 @@ class UserService(
 
     private fun subidaImagenCloudinary(avatar: MultipartFile): CompletableFuture<UploadResult> {
         return clodinary.uploadFileAsync(avatar, null)
+    }
+
+    fun exists(email: String?): Boolean {
+        return userRepository.existsUserByEmail(email.toString())
     }
 }

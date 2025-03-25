@@ -10,6 +10,6 @@ data class NewCustomerDTO(
     val email: String,
     val rol: Rol,
     val bornDate: LocalDate,
-    val avatar: MultipartFile,
+    val avatar: MultipartFile?,
     val password: String
 )
