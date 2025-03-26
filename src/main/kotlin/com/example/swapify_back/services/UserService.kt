@@ -34,7 +34,6 @@ class UserService(
 
     @Transactional
     fun saveUser(userdto: NewCustomerDTO): Profile {
-        // Create and save user
         val passwordEncoder = BCryptPasswordEncoder()
         var user1 = User().apply {
             email = userdto.email
@@ -42,7 +41,9 @@ class UserService(
         }
         user1 = userRepository.save(user1)
 
-        // Create and save profile
+        val verificationToken = generateVerificationToken(user1.email)
+        val verificationLink = "${System.getenv("LINK_VERIFICACION_EMAIL")}/$verificationToken"
+
         val profile1 = Profile().apply {
             id = user1.id
             nickname = userdto.nickname
@@ -55,8 +56,7 @@ class UserService(
             }
         }
 
-        // Send welcome email
-        email.sendWelcomeEmail(user1.email, userdto.nickname)
+        email.sendWelcomeEmail(user1.email, userdto.nickname, verificationLink)
 
         return profileRepository.save(profile1)
     }
@@ -116,7 +116,22 @@ class UserService(
         return jwtService.generateToken(loadUserByUsername(email))
     }
 
+    fun verifyUser(token: String): Map<String, String> {
+        val email = jwtService.extractUsername(token)
+        val user = userRepository.findByEmail(email)
+            .orElseThrow { IllegalArgumentException("Usuario no encontrado") }
 
+        if (!jwtService.isTokenValid(token, user)) {
+            throw IllegalArgumentException("Token inválido o expirado")
+        }
 
+        user.isVerified = true
+        userRepository.save(user)
+
+        return mapOf(
+            "message" to "Email verificado correctamente",
+            "email" to user.email
+        )
+    }
 
 }
