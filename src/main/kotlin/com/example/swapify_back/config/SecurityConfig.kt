@@ -26,18 +26,12 @@ class SecurityConfig(
     @Bean
     @Throws(Exception::class)
     fun securityFilterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
-        httpSecurity // Deshabilitar CSRF y CORS (si es necesario)
+        httpSecurity
             .csrf { obj: CsrfConfigurer<HttpSecurity> -> obj.disable() }
-            .cors { obj: CorsConfigurer<HttpSecurity> -> obj.disable() } // Configurar autenticación y filtros
-
-            .authorizeHttpRequests(Customizer { req: AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry ->
-                req
-                    .requestMatchers("**")
-                    .permitAll() //.requestMatchers("/auth/**", "/api/auth/forgot-password", "/api/auth/reset-password").permitAll()
-                    //.requestMatchers("/admin/**").hasRole("ADMIN")
-                    .anyRequest().authenticated()
+            .cors { obj: CorsConfigurer<HttpSecurity> -> obj.disable() }
+            .authorizeHttpRequests { req ->
+                req.requestMatchers("/**").permitAll()
             }
-            )
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtFilterChain, UsernamePasswordAuthenticationFilter::class.java)
 
