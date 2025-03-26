@@ -234,5 +234,7 @@ create table notification
             on update cascade
 );
 
+alter table users add column is_verify boolean default false not null;
+
 
 

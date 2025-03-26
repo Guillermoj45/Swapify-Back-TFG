@@ -31,4 +31,9 @@ class UserController(
     fun finUser(@RequestParam(value = "id", defaultValue = "0") id: UUID): User {
         return userService.findById(id)
     }
+
+    @PutMapping("/verify/{token}")
+    fun verifyNewUser(@PathVariable token: String): ResponseEntity<Void> {
+        return ResponseEntity(HttpStatus.OK)
+    }
 }

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenid@ a PowerZone</title>
+    <style>
+        body { font-family: Arial, sans-serif; color: #333; }
+        .container { max-width: 600px; margin: 20px auto; padding: 20px; border-radius: 10px; background-color: #f4f4f4; }
+        h1 { color: #ff6600; }
+        .button { background-color: #ff6600; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>¡Bienvenid@ a PowerZone, <span th:text="${name}"></span>! 🏋️‍♂️</h1>
+    <p>Nos emociona tenerte aquí. 🚀 PowerZone es la red social para los apasionados del fitness y la vida saludable.</p>
+
+    <ul>
+        <li>✅ Compartir tu progreso con fotos y publicaciones.</li>
+        <li>🤖 Preguntar a nuestra IA sobre entrenamientos y nutrición.</li>
+        <li>💬 Chatear con otros usuarios y hacer comunidad.</li>
+        <li>🏆 Descubrir nuevos retos y mantenerte motivado.</li>
+    </ul>
+
+    <p>¡Empieza ahora y comparte tu primera publicación! 💪🔥</p>
+    <a th:href="${LINK_VERIFICACION_EMAIL}" class="button">Ir a PowerZone</a>
+
+    <p>#PowerZone #Fitness #Salud #Comunidad 💪💪</p>
+</div>
+</body>
+</html>

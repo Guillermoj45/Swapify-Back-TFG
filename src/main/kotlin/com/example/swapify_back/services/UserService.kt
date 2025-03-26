@@ -33,29 +33,32 @@ class UserService(
 ) {
 
     @Transactional
-    fun saveUser(userdto: NewCustomerDTO) {
-
+    fun saveUser(userdto: NewCustomerDTO): Profile {
+        // Create and save user
         val passwordEncoder = BCryptPasswordEncoder()
-        var user1 = User()
-        user1.email = userdto.email
-        user1.passworde = passwordEncoder.encode(userdto.password)
+        var user1 = User().apply {
+            email = userdto.email
+            passworde = passwordEncoder.encode(userdto.password)
+        }
         user1 = userRepository.save(user1)
 
-        val profile1 = Profile()
-        profile1.id = user1.id
-        profile1.nickname = userdto.nickname
-        profile1.bornDate = userdto.bornDate
-
-        if (userdto.avatar != null) {
-            val futuroArchivo: CompletableFuture<UploadResult> = subidaImagenCloudinary(avatar = userdto.avatar)
-            profile1.avatar = futuroArchivo.get().publicId
-        } else {
-            profile1.avatar = "Swapify/avatares/vl4elwp26kqokvn2mk5g"
+        // Create and save profile
+        val profile1 = Profile().apply {
+            id = user1.id
+            nickname = userdto.nickname
+            bornDate = userdto.bornDate
+            avatar = if (userdto.avatar != null) {
+                val futuroArchivo = subidaImagenCloudinary(avatar = userdto.avatar)
+                futuroArchivo.get().publicId
+            } else {
+                "Swapify/avatares/vl4elwp26kqokvn2mk5g"
+            }
         }
 
-        profileRepository.save(profile1)
+        // Send welcome email
+        email.sendWelcomeEmail(user1.email, userdto.nickname)
 
-        email.sendWelcomeEmail(user1.email)
+        return profileRepository.save(profile1)
     }
 
     // @CacheEvict(value = "productos", key = "#id")
@@ -80,6 +83,9 @@ class UserService(
         if (!user.isPresent){
             return throw UsernameNotFoundException("User not found")
         }
+        if (!user.get().isVerified){
+            return throw IllegalArgumentException("User not verified")
+        }
 
         isPasswordValid(userLogin.password, user.get().passworde)
 
@@ -101,7 +107,16 @@ class UserService(
         return clodinary.uploadFileAsync(avatar, null)
     }
 
-    fun exists(email: String?): Boolean {
-        return userRepository.existsUserByEmail(email.toString())
+    fun exists(email: String): Boolean {
+        val si: Boolean = userRepository.existsUserByEmail(email)
+        return si
     }
+
+    fun generateVerificationToken(email: String): String {
+        return jwtService.generateToken(loadUserByUsername(email))
+    }
+
+
+
+
 }

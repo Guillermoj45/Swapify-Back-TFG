@@ -24,6 +24,9 @@ class User: UserDetails, Serializable {
     @Column(name = "password", nullable = false)
     var passworde: String = ""
 
+    @Column(name = "is_verify", nullable = false)
+    var isVerified: Boolean = false
+
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "created_at", nullable = false)
     var createdAt: LocalDateTime = LocalDateTime.now()
