@@ -1,5 +1,6 @@
 package com.example.swapify_back.config
 
+import com.example.swapify_back.security.OAuth2AuthenticationSuccessHandler
 import com.example.swapify_back.services.CustomOAuth2UserService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -21,7 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class SecurityConfig(
     private val jwtFilterChain: JwtFilter,
     private val authenticationProvider: AuthenticationProvider,
-    private val oAuth2UserService: CustomOAuth2UserService
+    private val oAuth2UserService: CustomOAuth2UserService,
+    private val jwtService: JwtService
 ) {
     @Value("\${SECURITY_REDIRECT_URL}")
     private val redirectUrl: String? = null
@@ -46,6 +48,8 @@ class SecurityConfig(
                 oauth2.userInfoEndpoint { userInfo ->
                     userInfo.userService(oAuth2UserService)
                 }
+                oauth2.successHandler(OAuth2AuthenticationSuccessHandler(jwtService))
+
             }
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtFilterChain, UsernamePasswordAuthenticationFilter::class.java)

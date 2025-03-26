@@ -5,9 +5,9 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.core.user.OAuth2User
 
-class CustomUserPrincipal(
-    private val user: User,
-    private val attributes: Map<String, Any>
+data class CustomUserPrincipal(
+    val user: User,
+    private val attributes: Map<String, Any>,
 ) : OAuth2User {
     override fun getAttributes(): Map<String, Any> = attributes
 

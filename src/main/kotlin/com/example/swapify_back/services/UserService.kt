@@ -98,7 +98,7 @@ class UserService(
     }
 
     private fun subidaImagenCloudinary(avatar: MultipartFile): CompletableFuture<UploadResult> {
-        return clodinary.uploadFileAsync(avatar, null)
+        return clodinary.uploadFileAsync(avatar, "avatares")
     }
 
     fun exists(email: String?): Boolean {

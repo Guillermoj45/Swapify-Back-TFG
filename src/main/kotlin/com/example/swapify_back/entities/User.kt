@@ -32,6 +32,9 @@ class User: UserDetails, Serializable {
     @Column(name = "rol", nullable = false)
     var rol: Rol = Rol.USER
 
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    var profile: Profile? = null
+
     override fun getAuthorities(): Collection<GrantedAuthority> {
         return listOf(SimpleGrantedAuthority(rol.name))
     }
