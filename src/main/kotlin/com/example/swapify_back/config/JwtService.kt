@@ -1,50 +1,65 @@
 package com.example.swapify_back.config
 
 import com.example.swapify_back.DTO.TokenDTO
-import com.example.swapify_back.entities.User
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
-import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import com.example.swapify_back.entities.User
+import io.jsonwebtoken.io.Decoders
 import java.security.Key
 import java.util.*
 
 @Service
 class JwtService {
-
     @Value("\${JWT_SECRET}")
-    private val secretKey: String? = null
+    private lateinit var SECRET_KEY: String
 
-    //Método que me genera el token
     fun generateToken(user: User): String {
-        val claims: MutableMap<String, Any?> = LinkedHashMap()
-        claims["email"] = user.email
-        claims["rol"] = user.rol.name
-        claims["fecha_creacion"] = System.currentTimeMillis()
-        claims["fecha_expiracion"] = System.currentTimeMillis() + 1000 * 60 * 60 * 12
-
-        return Jwts
-            .builder()
-            .setClaims(claims)
-            .signWith(getSignInKey(), SignatureAlgorithm.HS512)
+        return Jwts.builder()
+            .setSubject(user.email)
+            .setIssuedAt(Date(System.currentTimeMillis()))
+            .setExpiration(Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000)) // 24 hours
+            .signWith(getSigningKey())
             .compact()
     }
 
+    fun extractUsername(token: String): String {
+        return extractClaim(token) { claims -> claims.subject }
+    }
 
-    // Función extraer los datos del todo el token
-    fun extractDatosToken(token: String?): Claims {
-        return Jwts
-            .parserBuilder()
-            .setSigningKey(getSignInKey())
+    fun isTokenValid(token: String, user: User): Boolean {
+        val username = extractUsername(token)
+        return username == user.email && !isTokenExpired(token)
+    }
+
+    private fun isTokenExpired(token: String): Boolean {
+        return extractExpiration(token).before(Date())
+    }
+
+    private fun extractExpiration(token: String): Date {
+        return extractClaim(token) { claims -> claims.expiration }
+    }
+
+    private fun <T> extractClaim(token: String, claimsResolver: (Claims) -> T): T {
+        val claims = extractAllClaims(token)
+        return claimsResolver(claims)
+    }
+
+    private fun extractAllClaims(token: String): Claims {
+        return Jwts.parserBuilder()
+            .setSigningKey(getSigningKey())
             .build()
             .parseClaimsJws(token)
             .body
     }
 
-    // Función que me extrae los datos del usuario eliminando toda la seguridad y header del token
+    private fun getSigningKey(): Key {
+        val keyBytes = Base64.getDecoder().decode(SECRET_KEY)
+        return Keys.hmacShaKeyFor(keyBytes)
+    }
+
     fun extractTokenData(token1: String): TokenDTO {
         var token = token1
         token = token.trim { it <= ' ' }
@@ -59,25 +74,21 @@ class JwtService {
         )
     }
 
-    //Método que me comprueba si el token está expirado
-    fun isExpired(token: String): Boolean {
-        return Date(extractTokenData(token).fecha_expiracion.toString()).before(Date())
+    fun extractDatosToken(token: String?): Claims {
+        return Jwts
+            .parserBuilder()
+            .setSigningKey(getSignInKey())
+            .build()
+            .parseClaimsJws(token)
+            .body
     }
 
-    //Metodo que me decodifica el token
     private fun getSignInKey(): Key {
-        val keyBytes = Decoders.BASE64.decode(secretKey)
+        val keyBytes = Decoders.BASE64.decode(SECRET_KEY)
         return Keys.hmacShaKeyFor(keyBytes)
     }
 
-    fun desEncriptToken(token1: String): String {
-        var token = token1
-        if (token.startsWith("Bearer ")) {
-            token = token.substring(7).trim { it <= ' ' }
-        }
-        return token
+    fun isExpired(token: String): Boolean {
+        return Date(extractTokenData(token).fecha_expiracion.toString()).before(Date())
     }
-
-
-
 }
