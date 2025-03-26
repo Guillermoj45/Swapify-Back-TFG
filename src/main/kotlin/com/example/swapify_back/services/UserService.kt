@@ -12,6 +12,7 @@ import com.example.swapify_back.entities.User
 import com.example.swapify_back.repository.IProfileRepository
 import com.example.swapify_back.repository.IUserRepository
 import jakarta.transaction.Transactional
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.context.annotation.Lazy
 import org.springframework.http.HttpStatus
@@ -32,6 +33,10 @@ class UserService(
     @Lazy private val email: EmailController
 ) {
 
+    @Value("\${LINK_VERIFICACION_EMAIL}")
+    private lateinit var verificationBaseUrl: String
+
+
     @Transactional
     fun saveUser(userdto: NewCustomerDTO): Profile {
         val passwordEncoder = BCryptPasswordEncoder()
@@ -42,7 +47,7 @@ class UserService(
         user1 = userRepository.save(user1)
 
         val verificationToken = generateVerificationToken(user1.email)
-        val verificationLink = "${System.getenv("LINK_VERIFICACION_EMAIL")}/$verificationToken"
+        val verificationLink = "$verificationBaseUrl/$verificationToken"
 
         val profile1 = Profile().apply {
             id = user1.id

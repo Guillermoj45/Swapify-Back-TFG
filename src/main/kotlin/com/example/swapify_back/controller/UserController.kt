@@ -32,7 +32,7 @@ class UserController(
         return userService.findById(id)
     }
 
-    @PutMapping("/verify/{token}")
+    @GetMapping("/verify/{token}")
     fun verifyNewUser(@PathVariable token: String): ResponseEntity<Void> {
         userService.verifyUser(token)
         return ResponseEntity(HttpStatus.OK)
