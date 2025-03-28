@@ -24,8 +24,8 @@ class Settings {
     @Column(name = "name", nullable = false)
     var name: String = ""
 
-    @Column(name = "value", nullable = false)
-    var value: String = ""
+    @Column(name = "setting_value", nullable = false)
+    var settingValue: String = ""
 
     @OneToOne
     @JsonIgnore

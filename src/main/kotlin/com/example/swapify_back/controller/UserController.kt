@@ -3,6 +3,7 @@ package com.example.swapify_back.controller
 import com.example.swapify_back.DTO.LoginDTO
 import com.example.swapify_back.DTO.NewCustomerDTO
 import com.example.swapify_back.DTO.RespuestaTokenDTO
+import com.example.swapify_back.entities.Profile
 import com.example.swapify_back.entities.User
 import com.example.swapify_back.service.UserService
 import org.springframework.http.HttpStatus
@@ -16,9 +17,9 @@ class UserController(
     private var userService: UserService
 ) {
     @PostMapping("/create")
-    fun saveUser(@RequestBody user: NewCustomerDTO): ResponseEntity<Void> {
-        userService.saveUser(user)
-        return ResponseEntity(HttpStatus.CREATED)
+    fun saveUser(@RequestBody user: NewCustomerDTO): ResponseEntity<Profile> {
+        val savedUser = userService.saveUser(user)
+        return ResponseEntity.ok(savedUser)
     }
 
     @GetMapping("/login")
