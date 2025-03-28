@@ -23,120 +23,108 @@ import org.springframework.web.multipart.MultipartFile
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
-
 @Service
 class UserService(
     private val userRepository: IUserRepository,
     private val profileRepository: IProfileRepository,
     private val jwtService: JwtService,
-    private val clodinary: CloudinaryService,
-    @Lazy private val email: EmailController
+    private val cloudinary: CloudinaryService,
+    @Lazy private val emailController: EmailController
 ) {
 
     @Value("\${LINK_VERIFICACION_EMAIL}")
     private lateinit var verificationBaseUrl: String
 
+    private val passwordEncoder = BCryptPasswordEncoder()
 
     @Transactional
-    fun saveUser(userdto: NewCustomerDTO): Profile {
-        val passwordEncoder = BCryptPasswordEncoder()
-        var user1 = User().apply {
-            email = userdto.email
-            passworde = passwordEncoder.encode(userdto.password)
-        }
-        user1 = userRepository.save(user1)
+    fun saveUser(userDto: NewCustomerDTO): Profile {
+        val user = userRepository.save(
+            User().apply {
+                email = userDto.email
+                passworde = passwordEncoder.encode(userDto.password)
+            }
+        )
 
-        val verificationToken = generateVerificationToken(user1.email)
+        val verificationToken = generateVerificationToken(user.email)
         val verificationLink = "$verificationBaseUrl/$verificationToken"
+        emailController.sendWelcomeEmail(user.email, userDto.nickname, verificationLink)
 
-        val profile1 = Profile().apply {
-            id = user1.id
-            nickname = userdto.nickname
-            bornDate = userdto.bornDate
-            avatar = if (userdto.avatar != null) {
-                val futuroArchivo = subidaImagenCloudinary(avatar = userdto.avatar)
-                futuroArchivo.get().publicId
-            } else {
-                "Swapify/avatares/vl4elwp26kqokvn2mk5g"
+        val avatarPublicId = userDto.avatar?.let { uploadImageCloudinary(it).get().publicId }
+            ?: "Swapify/avatares/vl4elwp26kqokvn2mk5g"
+
+        return profileRepository.save(
+            Profile().apply {
+                id = user.id
+                nickname = userDto.nickname
+                bornDate = userDto.bornDate
+                avatar = avatarPublicId
             }
-        }
-
-        email.sendWelcomeEmail(user1.email, userdto.nickname, verificationLink)
-
-        return profileRepository.save(profile1)
-    }
-
-    // @CacheEvict(value = "productos", key = "#id")
-    // @CachePut(value = "productos", key = "#id")
-    @Cacheable(cacheNames = ["User"], key = "#id")
-    fun findById(id: UUID): User {
-        return userRepository.findById(id).get()
-    }
-
-    @Throws(UsernameNotFoundException::class)
-    fun loadUserByUsername(username: String?): User {
-        if (username != null) {
-            return userRepository.findByEmail(username).orElseThrow() {
-                UsernameNotFoundException("User not found")
-            }
-        }
-       return throw UsernameNotFoundException("User not found")
-    }
-
-    fun loginUser(userLogin:LoginDTO ): RespuestaTokenDTO{
-        var user: Optional<User> = userRepository.findByEmail(userLogin.email)
-        if (!user.isPresent){
-            return throw UsernameNotFoundException("User not found")
-        }
-        if (!user.get().isVerified){
-            return throw IllegalArgumentException("User not verified")
-        }
-
-        isPasswordValid(userLogin.password, user.get().passworde)
-
-        val generatedToken: String = jwtService.generateToken(user.get())
-
-        return RespuestaTokenDTO(
-            estado = HttpStatus.OK.value(),
-            token = generatedToken
         )
     }
 
-    private fun isPasswordValid(password: String, passworde: String) {
-        if (!BCryptPasswordEncoder().matches(password, passworde)) {
+    @Cacheable(cacheNames = ["User"], key = "#id")
+    fun findById(id: UUID): User = userRepository.findById(id).orElseThrow { UsernameNotFoundException("User not found") }
+
+    fun loadUserByUsername(username: String): User = userRepository.findByEmail(username).orElseThrow {
+        UsernameNotFoundException("User not found")
+    }
+
+    fun loginUser(userLogin: LoginDTO): RespuestaTokenDTO {
+        val user = userRepository.findByEmail(userLogin.email).orElseThrow {
+            UsernameNotFoundException("User not found")
+        }
+
+        validateUser(user)
+        validatePassword(userLogin.password, user.passworde)
+
+        return RespuestaTokenDTO(
+            estado = HttpStatus.OK.value(),
+            token = jwtService.generateToken(user)
+        )
+    }
+
+    private fun validateUser(user: User) {
+        if (!user.isVerified) {
+            throw IllegalArgumentException("User not verified")
+        }
+    }
+
+    private fun validatePassword(password: String, hashedPassword: String) {
+        if (!passwordEncoder.matches(password, hashedPassword)) {
             throw IllegalArgumentException("Invalid password")
         }
     }
 
-    private fun subidaImagenCloudinary(avatar: MultipartFile): CompletableFuture<UploadResult> {
-        return clodinary.uploadFileAsync(avatar, null)
-    }
+    private fun uploadImageCloudinary(avatar: MultipartFile): CompletableFuture<UploadResult> =
+        cloudinary.uploadFileAsync(avatar, null)
 
-    fun exists(email: String): Boolean {
-        val si: Boolean = userRepository.existsUserByEmail(email)
-        return si
-    }
+    fun exists(email: String): Boolean = userRepository.existsUserByEmail(email)
 
-    fun generateVerificationToken(email: String): String {
-        return jwtService.generateToken(loadUserByUsername(email))
-    }
+    fun generateVerificationToken(email: String): String = jwtService.generateToken(loadUserByUsername(email))
 
     fun verifyUser(token: String): Map<String, String> {
-        val email = jwtService.extractUsername(token)
-        val user = userRepository.findByEmail(email)
-            .orElseThrow { IllegalArgumentException("Usuario no encontrado") }
+        val user = getUserFromToken(token)
+        validateToken(token, user)
+        return updateVerificationStatus(user)
+    }
 
+    private fun validateToken(token: String, user: User) {
         if (!jwtService.isTokenValid(token, user)) {
             throw IllegalArgumentException("Token inválido o expirado")
         }
-
-        user.isVerified = true
-        userRepository.save(user)
-
-        return mapOf(
-            "message" to "Email verificado correctamente",
-            "email" to user.email
-        )
     }
 
+    private fun updateVerificationStatus(user: User): Map<String, String> {
+        user.isVerified = true
+        userRepository.save(user)
+        return mapOf("message" to "Email verificado correctamente", "email" to user.email)
+    }
+
+    private fun getUserFromToken(token: String): User {
+        val email = jwtService.extractUsername(token)
+        return userRepository.findByEmail(email).orElseThrow {
+            IllegalArgumentException("Usuario no encontrado")
+        }
+    }
 }
